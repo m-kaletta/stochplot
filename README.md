@@ -20,11 +20,6 @@ Install the latest published source directly from GitHub (for usage only):
 pip install git+https://github.com/m-kaletta/stochplot.git
 ```
 
-Editable/development install directly from GitHub (no clone required):
-```
-pip install -e git+https://github.com/m-kaletta/stochplot.git
-```
-
 
 ## Usage
 
