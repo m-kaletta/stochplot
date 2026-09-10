@@ -42,12 +42,17 @@ ensemble = wiener(1, 100, 500)
 # create a visualizer object that produces plots as svg-files
 visualizer = EnsembleVisualizer(ensemble, 'wiener process', y_label='value', y_range=[-2.2, 2.2])
 visualizer.plot_swarm()
-visualizer.plot_ensemble_distribution(method="kde")
-visualizer.plot_ensemble_curve_dist(method="kde")
+visualizer.plot_ensemble_distribution(method='kde')
+visualizer.plot_ensemble_curve_dist(method='kde')
 ```
 
+
 Further examples can be found at
-- examples/visualize_wiener_process.py — more exhaustive Wiener process visualizations
+- examples/visualize_wiener_process.py — more exhaustive Wiener process visualizations.\
+    We get for examle, with analytical moments by calling\
+    `plot_ensemble_curve_dist(method='kde')`
+![My diagram](examples\wiener_process_w_moments_density_curve_by_kde.svg)
+
 - examples/visualize_geometric_brownian.py — geometric Brownian motion example
 
 ### Public API
