@@ -3,10 +3,10 @@
 # stochplot
 
 Visualizations for ensembles of stochastic processes: 
-- singe paths
-- mean and standard deviations over time
+- single paths
+- mean and standard deviation over time
 - distribution over time by a heatmap encoding the density as intensity
-- distribution over time by showing estimations of the curves of probability density functions 
+- distribution over time as estimated probability density curves
 
 
 ## Installation
@@ -24,7 +24,7 @@ pip install git+https://github.com/m-kaletta/stochplot.git
 ## Usage
 
 ### Examples
-Creating a Wiener-process ensemble and render some visualizations of it
+Creating a Wiener-process ensemble and rendering some visualizations of it
 
 ```python
 import numpy as np
@@ -39,7 +39,7 @@ def wiener(time_len, num_steps, num_processes, seed=1):
 
 # create an ensemble of a numerical simulation of a wiener process
 ensemble = wiener(1, 100, 500)
-# create a visualizer object that produces plots as svg-files
+# create a visualizer object that produces plots as svg files
 visualizer = EnsembleVisualizer(ensemble, 'wiener process', y_label='value', y_range=[-2.2, 2.2])
 visualizer.plot_swarm()
 visualizer.plot_ensemble_distribution(method='kde')
@@ -48,21 +48,21 @@ visualizer.plot_ensemble_curve_dist(method='kde')
 
 
 Further examples can be found at
-- examples/visualize_wiener_process.py — more exhaustive Wiener process visualizations.\
-    We get for examle, with analytical moments by calling\
-    `plot_ensemble_curve_dist(method='kde')`
+- examples/visualize_wiener_process.py — more exhaustive Wiener process visualizations.
+  With analytical moments, calling
+    `plot_ensemble_curve_dist(method='kde')` produces the following image:
+
 ![My diagram](examples/wiener_process_w_moments_density_curve_by_kde.svg)
 
 - examples/visualize_geometric_brownian.py — geometric Brownian motion example
 
 ### Public API
-- `Ensemble` in `ensemble.py`, encapsulate a collection of paths of a stochastic process to resemble that stochastic process numerically. 
-- `Moments` in `visualizer.py` is a container for the standard deviation and mean value of a stochastic process as it evolves over time. 
-- `EnsembleVisualizer` in `visualizer.py` provides an object that creates different plots from an `Ensemble`. 
+- `Ensemble` in `ensemble.py` - encapsulates a collection of sample paths that approximate the stochastic process numerically. 
+- `Moments` in `visualizer.py` - is a container for mean and standard deviation arrays, as they evolve over time. 
+- `EnsembleVisualizer` in `visualizer.py` - provides an object that creates different plots from an `Ensemble`. 
 
 See the docstrings for more details and the examples for concrete usage patterns.
 
-## License 
+## License
 This project is licensed under the MIT License. 
 See the [LICENSE](LICENSE) file for details.
-
