@@ -28,6 +28,7 @@ class Moments:
     std : ndarray
         Standard deviation over ensemble processes for each time step.
     """
+
     def __init__(self, mean, std):
         self.mean = mean
         self.std = std
@@ -39,7 +40,7 @@ class EnsembleVisualizer:
     Takes an Ensemble and exposes methods to render:
       - plot_single_example: single example paths
       - plot_swarm: several example paths + optional analytical moments
-      - plot_ensemble_distribution: examples + density heatmaps + optional analytical moments   
+      - plot_ensemble_distribution: examples + density heatmaps + optional analytical moments
       - plot_ensemble_curve_dist: density curve distributions
 
     Parameters
@@ -60,14 +61,15 @@ class EnsembleVisualizer:
         If provided, analytical mean/std are plotted on top of the empirically estimated ones.
     """
 
-    def __init__(self, ensemble, title, y_label, y_range, x_label='t', fig_size=(8, 4), image_root='', analytical_moments=None, example_seed=None):
+    def __init__(self, ensemble, title, y_label, y_range, x_label='t', fig_size=(8, 4), image_root='',
+                 analytical_moments=None, example_seed=None):
         self._fig_size = fig_size
         self._image_root = image_root
         self._analytical_moments = analytical_moments
         self._example_seed = example_seed
         self._ensemble = EnsembleDistribution(ensemble, y_range)
         self._base_title = title
-        self._x_label= x_label
+        self._x_label = x_label
         self._y_label = y_label
         self._canvas = [ensemble.time[0], ensemble.time[-1], y_range[0], y_range[1]]
         self._create_colormap()
@@ -95,14 +97,17 @@ class EnsembleVisualizer:
         else:
             np.random.seed(self._example_seed)
             example_idx = np.random.choice(self._ensemble.num_processes, size=num_examples, replace=False)
-        self.ax.plot(self._ensemble.time, self._ensemble[example_idx[0], :], linewidth=self._linewidths['examples'], color=self._colors['examples'], label='Examples')
+        self.ax.plot(self._ensemble.time, self._ensemble[example_idx[0], :], linewidth=self._linewidths['examples'],
+                     color=self._colors['examples'], label='Examples')
         for example_num in range(num_examples):
             process = self._ensemble[example_idx[example_num]]
-            self.ax.plot(self._ensemble.time, process, linewidth=self._linewidths['examples'], color=self._colors['examples'])
+            self.ax.plot(self._ensemble.time, process, linewidth=self._linewidths['examples'],
+                         color=self._colors['examples'])
 
     def _add_density_gradient(self, method):
         density = self._ensemble.get_density(method)
-        self.ax.imshow(density, extent=self._canvas, aspect='auto', origin='lower', cmap=self._colors['density gradient'], interpolation='gaussian')
+        self.ax.imshow(density, extent=self._canvas, aspect='auto', origin='lower',
+                       cmap=self._colors['density gradient'], interpolation='gaussian')
 
     def _add_density_curve(self, method, add_baseline_dots=False):
         density_obj = self._ensemble.get_density_obj(method)
@@ -113,25 +118,31 @@ class EnsembleVisualizer:
         for time_idx in range(time_skip, self._ensemble.num_steps, time_skip):
             curve = density[:, time_idx] * time_skip * self._ensemble.time_increment * 2.0
             t = self._ensemble.time[time_idx]
-            self.ax.fill_betweenx(density_obj.rv_array, t + curve, t, color=self._colors['density filling'], label=label)
-            self.ax.plot(t + curve, density_obj.rv_array, linewidth=self._linewidths['density'], color=self._colors['density outline'])
+            self.ax.fill_betweenx(density_obj.rv_array, t + curve, t, color=self._colors['density filling'],
+                                  label=label)
+            self.ax.plot(t + curve, density_obj.rv_array, linewidth=self._linewidths['density'],
+                         color=self._colors['density outline'])
             label = None
             if add_baseline_dots:
-                self.ax.axvline([t, t], ymin=density_obj.rv_array[0], ymax=density_obj.rv_array[-1], linewidth=0.5, linestyle=':', color='k')
+                self.ax.axvline([t, t], ymin=density_obj.rv_array[0], ymax=density_obj.rv_array[-1], linewidth=0.5,
+                                linestyle=':', color='k')
 
     def _add_moments(self, moments, style, color, linewidth, legend_prefix=''):
         time = self._ensemble.time
-        self.ax.plot(time, moments.mean, linewidth=linewidth, color=color, linestyle=style, label=legend_prefix + 'Mean $\\pm$ 2 Std')
+        self.ax.plot(time, moments.mean, linewidth=linewidth, color=color, linestyle=style,
+                     label=legend_prefix + 'Mean $\\pm$ 2 Std')
         self.ax.plot(time, moments.mean - moments.std * 2, linewidth=linewidth, color=color, linestyle=style)
         self.ax.plot(time, moments.mean + moments.std * 2, linewidth=linewidth, color=color, linestyle=style)
 
     def _add_analytical_moments(self):
         if self._analytical_moments is not None:
-            self._add_moments(self._analytical_moments, style='--', color=self._colors['analytical moments'], linewidth=self._linewidths['analytical moments'])
+            self._add_moments(self._analytical_moments, style='--', color=self._colors['analytical moments'],
+                              linewidth=self._linewidths['analytical moments'])
 
     def _add_estimated_moments(self):
         moments = Moments(self._ensemble.mean, self._ensemble.std)
-        self._add_moments(moments, style=':', color=self._colors['empirical moments'], linewidth=self._linewidths['empirical moments'], legend_prefix='Estimated ')
+        self._add_moments(moments, style=':', color=self._colors['empirical moments'],
+                          linewidth=self._linewidths['empirical moments'], legend_prefix='Estimated ')
 
     def _add_annotation(self, title):
         assert self.fig is not None
@@ -182,7 +193,7 @@ class EnsembleVisualizer:
         title = self._base_title + ' swarm'
         self._add_annotation(title)
         self._finish_plot(title)
-        
+
     def plot_ensemble_distribution(self, method='kde norm', fig=None, ax=None, linewidths=None):
         self._linewidths = linewidths if linewidths is not None else self.default_linewidths()
         self._start_plot(fig, ax)
