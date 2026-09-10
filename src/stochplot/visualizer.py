@@ -3,6 +3,7 @@ import re
 
 import matplotlib.colors as plt_col
 import matplotlib.pyplot as plt
+import numpy as np
 
 from .ensemble import EnsembleDistribution
 
@@ -59,12 +60,14 @@ class EnsembleVisualizer:
         If provided, analytical mean/std are plotted on top of the empirically estimated ones.
     """
 
-    def __init__(self, ensemble, title, y_label, y_range, fig_size=(8, 4), image_root='', analytical_moments=None):
+    def __init__(self, ensemble, title, y_label, y_range, x_label='t', fig_size=(8, 4), image_root='', analytical_moments=None, example_seed=None):
         self._fig_size = fig_size
         self._image_root = image_root
         self._analytical_moments = analytical_moments
+        self._example_seed = example_seed
         self._ensemble = EnsembleDistribution(ensemble, y_range)
         self._base_title = title
+        self._x_label= x_label
         self._y_label = y_label
         self._canvas = [ensemble.time[0], ensemble.time[-1], y_range[0], y_range[1]]
         self._create_colormap()
@@ -82,8 +85,14 @@ class EnsembleVisualizer:
                         'density gradient': get_gradient(cyan)}
 
     def _add_examples(self, num_examples, linewidth=2):
-        self.ax.plot(self._ensemble.time, self._ensemble[0, :], linewidth=linewidth, color=self._colors['examples'], label='Examples')
-        for process in self._ensemble[1:num_examples, :]:
+        if self._example_seed is None:
+            example_idx = range(num_examples)
+        else:
+            np.random.seed(self._example_seed)
+            example_idx = np.random.choice(self._ensemble.num_processes, size=num_examples, replace=False)
+        self.ax.plot(self._ensemble.time, self._ensemble[example_idx[0], :], linewidth=linewidth, color=self._colors['examples'], label='Examples')
+        for example_num in range(num_examples):
+            process = self._ensemble[example_idx[example_num]]
             self.ax.plot(self._ensemble.time, process, linewidth=linewidth, color=self._colors['examples'])
 
     def _add_density_gradient(self, method):
@@ -122,12 +131,13 @@ class EnsembleVisualizer:
     def _add_annotation(self, title):
         assert self.fig is not None
         self.ax.set_ylim(self._ensemble.rv_range)
-        self.ax.set_xlabel('t')
+        self.ax.set_xlabel(self._x_label)
         self.ax.set_ylabel(self._y_label)
-        self.ax.set_title(title)
-        self.ax.legend(loc='lower center', ncol=5, bbox_to_anchor=(0.5, -0.29))
-        self.fig.tight_layout()
-        self.fig.subplots_adjust(bottom=0.205)
+        if not self._external_fig:
+            self.ax.set_title(title)
+            self.ax.legend(loc='lower center', ncol=5, bbox_to_anchor=(0.5, -0.29))
+            self.fig.tight_layout()
+            self.fig.subplots_adjust(bottom=0.205)
 
     def _create_filename(self, title):
         filename = title.lower()
@@ -140,13 +150,16 @@ class EnsembleVisualizer:
     def _start_plot(self, fig, ax):
         if ax is None or fig is None:
             self.fig, self.ax = plt.subplots(figsize=self._fig_size)
+            self._external_fig = False
         else:
             self.ax = ax
             self.fig = fig
+            self._external_fig = True
 
     def _finish_plot(self, title):
-        file_name = self._create_filename(title)
-        self.fig.savefig(file_name)
+        if not self._external_fig:
+            filename = self._create_filename(title)
+            self.fig.savefig(filename)
 
     def plot_single_example(self, fig=None, ax=None):
         self._start_plot(fig, ax)
