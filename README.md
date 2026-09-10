@@ -2,7 +2,7 @@
 
 # stochplot
 
-Visualizations for ensembles of stochastic processes: 
+Tiny module for visualizations of ensembles of stochastic processes: 
 - single paths
 - mean and standard deviation over time
 - distribution over time by a heatmap encoding the density as intensity
@@ -10,16 +10,23 @@ Visualizations for ensembles of stochastic processes:
 
 
 ## Installation
-Install from a local checkout (recommended for development inside a virtualenv):
+
+### Local Checkout
+Install from a local checkout (recommended for development inside a virtual environment):
 ```
 python -m pip install -e .
 ```
 
+### Installation from GitHub
 Install the latest published source directly from GitHub (for usage only):
 ```
 pip install git+https://github.com/m-kaletta/stochplot.git
 ```
 
+### Vendoring
+Since the library consists (apart from examples) of only two files, vendoring is also reasonable: copy the following into your codebase.
+- 'src/stochplot/ensemble.py'
+- 'src/stochplot/visualizer.py'
 
 ## Usage
 
