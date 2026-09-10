@@ -51,7 +51,7 @@ Further examples can be found at
 - examples/visualize_wiener_process.py — more exhaustive Wiener process visualizations.\
     We get for examle, with analytical moments by calling\
     `plot_ensemble_curve_dist(method='kde')`
-![My diagram](examples\wiener_process_w_moments_density_curve_by_kde.svg)
+![My diagram](examples/wiener_process_w_moments_density_curve_by_kde.svg)
 
 - examples/visualize_geometric_brownian.py — geometric Brownian motion example
 
