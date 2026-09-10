@@ -10,23 +10,25 @@ Tiny module for visualizations of ensembles of stochastic processes:
 
 
 ## Installation
+Three alternatives are described. 
+Choose depending on your use case and preference.
 
-### Local Checkout
+### Local Checkout - Development
 Install from a local checkout (recommended for development inside a virtual environment):
 ```
 python -m pip install -e .
 ```
 
-### Installation from GitHub
-Install the latest published source directly from GitHub (for usage only):
+### Installation from GitHub - Usage Only
+Install the latest published source directly from GitHub:
 ```
 pip install git+https://github.com/m-kaletta/stochplot.git
 ```
 
-### Vendoring
+### Vendoring - Integration
 Since the library consists (apart from examples) of only two files, vendoring is also reasonable: copy the following into your codebase.
-- 'src/stochplot/ensemble.py'
-- 'src/stochplot/visualizer.py'
+- `src/stochplot/ensemble.py`
+- `src/stochplot/visualizer.py`
 
 ## Usage
 
