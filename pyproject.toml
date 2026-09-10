@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "stochplot"
+version = "0.1.0"
+description = "Visualizations for an ensemble of a stochastic process"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    {name = "Manuel Kaletta"}
+]
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "scipy"
+]
+
+[project.urls]
+Homepage = "https://github.com/m-kaletta/stochplot"
+Repository = "https://github.com/m-kaletta/stochplot"
+Issues = "https://github.com/m-kaletta/stochplot/issues"
